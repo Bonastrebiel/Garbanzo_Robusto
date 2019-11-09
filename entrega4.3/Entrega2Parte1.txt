@@ -1,0 +1,305 @@
+#include <string.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <stdio.h>
+#include <mysql.h>
+
+int sock_conn, sock_listen, ret;
+struct sockaddr_in serv_adr;
+char buff[512];
+char buff2[512];
+int err;
+MYSQL *conn;
+MYSQL_RES *resultado;
+MYSQL_ROW row;
+
+
+int IniciarSesion(char nombre[20], char contra[20])
+{
+	char consulta[100];
+	strcpy(consulta, "SELECT Jugador.contra FROM Jugador WHERE Jugador.nombre = '");
+	strcat(consulta, nombre);
+	strcat(consulta, "'");
+	int err;
+	err=mysql_query (conn, consulta);
+	if (err!=0)
+	{
+		printf ("Error al consultar datos de la base %u %s\n",
+				mysql_errno(conn), mysql_error(conn));
+		exit (1);
+	}
+	resultado = mysql_store_result (conn);
+	row = mysql_fetch_row (resultado);
+	if (row == NULL)
+		printf ("No se han obtenido datos en la consulta\n");			
+	else
+	{
+		if (strcmp(contra, row[0])==0)
+			return 0;
+		else
+			return -1;
+		
+	}
+}
+int Registrar(char nombre[20], char contra[20])
+{
+	char consulta[100];
+	strcpy(consulta, "INSERT INTO Jugador(id, nombre, contra, puntuacionMax ) VALUES(NULL, '");
+	strcat(consulta, nombre);
+	strcat(consulta, "', '");
+	strcat(consulta, contra);
+	strcat(consulta, "', 0)");
+	int err;
+	err=mysql_query (conn, consulta);
+	if (err!=0)
+	{
+		printf ("Error al introducir datos de la base %u %s\n", mysql_errno(conn), mysql_error(conn));
+		return -1;
+	}		
+	else
+	{
+		return 0;
+	}
+}
+int PideMaximo()
+{
+	char consulta[300];
+	strcpy (consulta,"SELECT count(Partida.id) FROM Partida WHERE Partida.ganador = (SELECT Jugador.nombre FROM Jugador WHERE Jugador.puntuacionMax = (SELECT MAX(Jugador.puntuacionMax) FROM Jugador));");
+	int err;
+	err=mysql_query (conn, consulta);
+	if (err!=0)
+	{
+		printf ("Error al consultar datos de la base %u %s\n",
+				mysql_errno(conn), mysql_error(conn));
+		exit (1);
+	}
+	resultado = mysql_store_result (conn);
+	row = mysql_fetch_row (resultado);
+	if (row == NULL)
+	{
+		return -1;
+		printf ("No se han obtenido datos en la consulta\n");
+	}
+	else
+	{
+		int NumPartidas = atoi(row[0]);
+		return NumPartidas;
+	}
+}
+int PideMinimo()
+{
+	char consulta[300];
+	strcpy (consulta,"SELECT count(Partida.id) FROM Partida WHERE Partida.ganador = (SELECT Jugador.nombre FROM Jugador WHERE Jugador.puntuacionMax = (SELECT MIN(Jugador.puntuacionMax) FROM Jugador));");
+	int err;
+	err=mysql_query (conn, consulta);
+	if (err!=0)
+	{
+		printf ("Error al consultar datos de la base %u %s\n",
+				mysql_errno(conn), mysql_error(conn));
+		exit (1);
+	}
+	resultado = mysql_store_result (conn);
+	row = mysql_fetch_row (resultado);
+	if (row == NULL)
+	{
+		return -1;
+		printf ("No se han obtenido datos en la consulta\n");
+	}
+	else
+	{
+		int NumPartidas = atoi(row[0]);
+		return NumPartidas;
+	}
+}
+void ConsultaFecha(char fecha[11], char buff2[512])
+{
+	char consulta[300];
+	strcpy (consulta,"SELECT Jugador.nombre FROM Jugador WHERE Jugador.id IN (SELECT Jugador.id FROM Partida, Relacion, Jugador WHERE Jugador.puntuacionMax = (SELECT MAX(Jugador.puntuacionMax) FROM Partida, Relacion, Jugador WHERE Partida.fecha = '");
+	strcat (consulta, fecha);
+	strcat (consulta,"' AND Partida.id = Relacion.idJugador AND Relacion.idJugador = Jugador.id) AND Jugador.id = Relacion.idJugador AND Relacion.idPartida = Partida.id AND Partida.fecha = '");
+	strcat (consulta, fecha);
+	strcat (consulta, "');");
+	int err;
+	err=mysql_query (conn, consulta);
+	if (err!=0)
+	{
+		printf ("Error al consultar datos de la base %u %s\n",
+				mysql_errno(conn), mysql_error(conn));
+		exit (1);
+	}
+	resultado = mysql_store_result (conn);
+	row = mysql_fetch_row (resultado);
+	if (row == NULL)
+	{
+		strcpy(buff2,"ERROR: No se han obtenido datos en la consulta");
+		printf ("No se han obtenido datos en la consulta\n");
+	}
+	else
+	{
+		strcpy(buff2,row[0]);
+		row = mysql_fetch_row (resultado);
+	}
+}
+int TiempoMedio(char nombre[20])
+{
+	char consulta[300];
+	strcpy (consulta,"SELECT avg(Partida.tiempo) FROM Partida, Jugador, Relacion WHERE Partida.dificultad = 'd' AND Jugador.nombre = '");
+	strcat (consulta,nombre);
+	strcat (consulta,"' AND Jugador.id = Relacion.idJugador AND Relacion.idPartida = Partida.id;");
+	
+	int err;
+	err=mysql_query (conn, consulta);
+	if (err!=0)
+	{
+		printf ("Error al consultar datos de la base %u %s\n",
+				mysql_errno(conn), mysql_error(conn));
+		exit (1);
+	}
+	resultado = mysql_store_result (conn);
+	row = mysql_fetch_row (resultado);
+	
+	if (row == NULL)
+	{
+		return -1;
+		printf ("No se han obtenido datos en la consulta\n");
+	}
+	else
+	{
+		int tiempo = atoi(row[0]);
+		return tiempo;
+	}
+}
+
+int main(int argc, char *argv[])
+{
+	conn = mysql_init(NULL);
+	if (conn==NULL)
+	{
+		printf ("Error al crear la conexi\uffc3\uffc2\uffb3n: %u %s\n", mysql_errno(conn), mysql_error(conn));
+		exit (1);
+	}
+	conn = mysql_real_connect (conn, "localhost","root", "mysql", "BBDDjuego", 0, NULL, 0);
+	if (conn==NULL)
+	{
+		printf ("Error al inicializar la conexi\uffc3\uffc2\uffb3n: %u %s\n", mysql_errno(conn), mysql_error(conn));
+		exit (1);
+	}
+	// INICIALITZACIONS
+	// Obrim el socket
+	if ((sock_listen = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+		printf("Error creant socket");
+	// Fem el bind al port
+	
+	
+	memset(&serv_adr, 0, sizeof(serv_adr));// inicialitza a zero serv_addr
+	serv_adr.sin_family = AF_INET;
+	
+	// asocia el socket a cualquiera de las IP de la m?quina. 
+	//htonl formatea el numero que recibe al formato necesario
+	serv_adr.sin_addr.s_addr = htonl(INADDR_ANY);
+	// escucharemos en el port 9050
+	serv_adr.sin_port = htons(9050);
+	if (bind(sock_listen, (struct sockaddr *) &serv_adr, sizeof(serv_adr)) < 0)
+		printf ("Error al bind");
+	//La cola de peticiones pendientes no podr? ser superior a 4
+	if (listen(sock_listen, 2) < 0)
+		printf("Error en el Listen");
+	printf ("Escuchando\n");
+	sock_conn = accept(sock_listen, NULL, NULL);
+	int i;
+	// Atenderemos solo 5 peticione
+	for(i=0;i<10;i++)
+	{
+		printf ("He recibido conexi?n\n");
+		//sock_conn es el socket que usaremos para este cliente
+		
+		// Ahora recibimos su nombre, que dejamos en buff
+		ret = read(sock_conn, buff, sizeof(buff));
+		printf ("Recibido\n");
+		
+		// Tenemos que a?adirle la marca de fin de string 
+		// para que no escriba lo que hay despues en el buffer
+		buff[ret]='\0';
+		
+		//Escribimos el nombre en la consola
+		
+		printf ("Se ha conectado: %s\n",buff);
+		
+		
+		char *p = strtok( buff, "/");
+		int codigo =  atoi (p);
+		
+		if (codigo ==1) //piden la longitd del nombre
+		{
+			p = strtok( NULL, "/");
+			char nombre[20];
+			strcpy (nombre, p);
+			p = strtok( NULL, "/");
+			char contra[20];
+			strcpy (contra, p);
+			printf ("Codigo: %d, Nombre: %s, Contrase\ufff1a:%s\n", codigo, nombre, contra);
+			sprintf(buff, "%d", (IniciarSesion(nombre, contra)));
+			write (sock_conn, buff, strlen(buff));
+		}
+		
+		if (codigo ==2) //Registrar usuario
+		{
+			p = strtok( NULL, "/");
+			char nombre[20];
+			strcpy (nombre, p);
+			p = strtok( NULL, "/");
+			char contra[20];
+			strcpy (contra, p);
+			printf ("Codigo: %d, Nombre: %s, Contrase\ufff1a:%s\n", codigo, nombre, contra);
+			if (Registrar(nombre, contra)==0)
+				strcpy(buff2, "El usuario ha sido registrado");
+			else
+				strcpy(buff2, "El usuario no ha sido registrado");
+			write (sock_conn, buff2, strlen(buff2));
+		}
+		
+		if (codigo ==3) //Piden maximo
+		{
+			p = strtok( NULL, "/");
+			sprintf(buff2, "%d", PideMaximo());
+			write (sock_conn,buff2,strlen(buff2));
+		}
+		if (codigo ==4) //Piden minimo
+		{
+			p = strtok( NULL, "/");
+			sprintf(buff2, "%d", PideMinimo());
+			write (sock_conn,buff2,strlen(buff2));
+		}
+/*		if (codigo ==5) *///Piden codigo miguel dan fecha
+/*		{*/
+/*			p = strtok( NULL, "\0");*/
+/*			char fecha[11];*/
+/*			strcpy(fecha,p);*/
+/*			char respuesta[50];*/
+/*			ConsultaFecha(fecha, respuesta);*/
+/*			printf(respuesta);*/
+/*			strcpy(buff2, respuesta);*/
+/*			write (sock_conn,buff2,strlen(buff2));*/
+/*		}*/
+		if (codigo ==5) //Piden codigo miguel dan fecha
+		{
+			p = strtok( NULL, "\0");
+			char fecha[11];
+			strcpy(fecha,p);
+			ConsultaFecha(fecha, buff2);
+			write (sock_conn,buff2,strlen(buff2));
+		}
+		if (codigo ==6) //Piden codigo Uriel dan nombre
+		{
+			p = strtok( NULL, "\0");
+			char nombre[20];
+			strcpy(nombre,p);
+			sprintf(buff2, "%d", TiempoMedio(nombre));
+			write (sock_conn,buff2,strlen(buff2));
+		}
+	}strcpy(buff2,"ERROR");
+	close(sock_conn) ;
+}
