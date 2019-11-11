@@ -1,0 +1,14 @@
+C:\Users\Biel\Desktop\Graficos Pinturillo\Graficos Pinturillo\obj\x86\Debug\WindowsFormsApplication1.Form1.resources
+C:\Users\Biel\Desktop\Graficos Pinturillo\Graficos Pinturillo\obj\x86\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\Biel\Desktop\Graficos Pinturillo\Graficos Pinturillo\obj\x86\Debug\Graficos Pinturillo.csproj.GenerateResource.Cache
+C:\Users\Biel\Desktop\Graficos Pinturillo\Graficos Pinturillo\bin\Debug\Graficos Pinturillo.exe
+C:\Users\Biel\Desktop\Graficos Pinturillo\Graficos Pinturillo\bin\Debug\Graficos Pinturillo.pdb
+C:\Users\Biel\Desktop\Graficos Pinturillo\Graficos Pinturillo\obj\x86\Debug\Graficos Pinturillo.exe
+C:\Users\Biel\Desktop\Graficos Pinturillo\Graficos Pinturillo\obj\x86\Debug\Graficos Pinturillo.pdb
+C:\Users\bielb\Desktop\Graficos Pinturillo\Graficos Pinturillo\Graficos Pinturillo\obj\x86\Debug\Graficos Pinturillo.exe
+C:\Users\bielb\Desktop\Graficos Pinturillo\Graficos Pinturillo\Graficos Pinturillo\obj\x86\Debug\Graficos Pinturillo.pdb
+C:\Users\bielb\Desktop\Graficos Pinturillo\Graficos Pinturillo\Graficos Pinturillo\bin\Debug\Graficos Pinturillo.exe
+C:\Users\bielb\Desktop\Graficos Pinturillo\Graficos Pinturillo\Graficos Pinturillo\bin\Debug\Graficos Pinturillo.pdb
+C:\Users\bielb\Desktop\Graficos Pinturillo\Graficos Pinturillo\Graficos Pinturillo\obj\x86\Debug\WindowsFormsApplication1.Form1.resources
+C:\Users\bielb\Desktop\Graficos Pinturillo\Graficos Pinturillo\Graficos Pinturillo\obj\x86\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\bielb\Desktop\Graficos Pinturillo\Graficos Pinturillo\Graficos Pinturillo\obj\x86\Debug\Graficos Pinturillo.csproj.GenerateResource.Cache
