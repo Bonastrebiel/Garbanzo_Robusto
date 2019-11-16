@@ -138,3 +138,13 @@ C:\Users\migue\Desktop\3A\SO\Entrega4.3\cliente_inicial\WindowsFormsApplication1
 C:\Users\migue\Desktop\3A\SO\Entrega4.3\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
 C:\Users\migue\Desktop\3A\SO\Entrega4.3\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
 C:\Users\migue\Desktop\3A\SO\Entrega4.3\cliente_inicial\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.GenerateResource.Cache
+C:\Users\ferri\OneDrive\Escritorio\Entrega2Completa\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+C:\Users\ferri\OneDrive\Escritorio\Entrega2Completa\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+E:\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+E:\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+E:\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+E:\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
+E:\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\obj\Debug\clienteForm.csprojResolveAssemblyReference.cache
+E:\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
+E:\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+E:\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.GenerateResource.Cache

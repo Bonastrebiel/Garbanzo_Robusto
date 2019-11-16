@@ -1,8 +1,7 @@
+DROP DATABASE IF EXISTS TG1Pinturillo;
+CREATE DATABASE TG1Pinturillo;
 
-DROP DATABASE IF EXISTS BBDDjuego;
-CREATE DATABASE BBDDjuego;
-
-USE BBDDjuego;
+USE TG1Pinturillo;
 
 CREATE TABLE Partida (
 id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -16,7 +15,6 @@ CREATE TABLE Jugador (
 id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
 nombre VARCHAR(20) NOT NULL,
 contra VARCHAR(20) NOT NULL,
-conectado INTEGER NOT NULL,
 puntuacionMax INTEGER NOT NULL
 )ENGINE = InnoDB;
 
@@ -35,10 +33,10 @@ INSERT INTO Partida(id, ganador, tiempo, fecha, dificultad) VALUES(NULL, "Él", 
 INSERT INTO Partida(id, ganador, tiempo, fecha, dificultad) VALUES(NULL, "Ella", 169, "02/07/1972","d");
 INSERT INTO Partida(id, ganador, tiempo, fecha, dificultad) VALUES(NULL, "Él", 420, "02/07/1972","d");
 
-INSERT INTO Jugador VALUES(NULL, "Yo", "1234", 0, 400);
-INSERT INTO Jugador VALUES(NULL, "Tu", "12345", 0, 500);
-INSERT INTO Jugador VALUES(NULL, "Él", "123456", 0, 200);
-INSERT INTO Jugador VALUES(NULL, "Ella", "123458", 0, 300);
+INSERT INTO Jugador VALUES(NULL, "Yo", "1234", 400);
+INSERT INTO Jugador VALUES(NULL, "Tu", "12345", 500);
+INSERT INTO Jugador VALUES(NULL, "Él", "123456", 200);
+INSERT INTO Jugador VALUES(NULL, "Ella", "123458", 300);
 
 INSERT INTO Relacion VALUES(1, 1, 400);
 INSERT INTO Relacion VALUES(1, 2, 350);
@@ -53,4 +51,5 @@ INSERT INTO Relacion VALUES(4, 1, 100);
 INSERT INTO Relacion VALUES(5, 3, 100);
 INSERT INTO Relacion VALUES(5, 4, 10);
 INSERT INTO Relacion VALUES(5, 1, 99);
+
 
