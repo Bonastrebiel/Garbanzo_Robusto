@@ -17,10 +17,12 @@ namespace WindowsFormsApplication1
         bool SesionIniciada;
         Thread atender;
         Graphics g;
-        int x =-1;
-        int y =-1;
-        bool moving =false;
+        int x = -1;
+        int y = -1;
+        bool moving = false;
         Pen pen;
+        int numConectados = 0;
+        int idPartida;
         public Form1()
         {
             InitializeComponent();
@@ -33,6 +35,11 @@ namespace WindowsFormsApplication1
         private void Form1_Load(object sender, EventArgs e)
         {
             SesionIniciada = false;
+            CheckForIllegalCrossThreadCalls = false;
+            ConectadosGridView.ColumnCount = 1;
+            ConectadosGridView.RowCount = numConectados + 1;
+            ConectadosGridView[0, 0].Value = "Conectados";
+
         }
         private void AtenderServidor()
         {
@@ -49,7 +56,6 @@ namespace WindowsFormsApplication1
                     if (Conectar == 0)
                     {
                         SesionIniciada = true;
-                        MessageBox.Show("Has iniciado sesión");
                     }
                     else
                     {
@@ -61,35 +67,45 @@ namespace WindowsFormsApplication1
                 {
                     MessageBox.Show(trozos[1].Split('\0')[0]);
                 }
-                else if (codigo == 3 || codigo == 4)
+                else if (codigo == 3)
                 {
-                    string mensaje = trozos[1].Split('\0')[0];
-                    MessageBox.Show("El numero de partidas ganadas es: " + mensaje);
+                    string resultado = String.Empty;
+                    int numConectados = trozos.Length - 1;
+                    ConectadosGridView.RowCount = numConectados;
+                    ConectadosGridView[0, 0].Value = "Conectados";
+                    int i;
+                    for (i = 1; i < numConectados; i++)
+                        ConectadosGridView[0, i].Value = trozos[i];
+                }
+                else if (codigo == 4)
+                {
+                    string ElQueInvita = trozos[1].Split('\0')[0];
+                    idPartida = Convert.ToInt32(trozos[2].Split('\0')[0]);
+                    DialogResult r = MessageBox.Show("Te ha llegado una invitación de partida de " + ElQueInvita + ". Quieres aceptarla?", nombre.Text, MessageBoxButtons.YesNo);
+                    if (r == DialogResult.Yes)
+                    {
+                        string mensaje = "4/" + idPartida;
+                        // Enviamos al servidor la confirmación
+                        byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                        server.Send(msg);
+                    }
+                    if (r == DialogResult.No)
+                    {
+                        string mensaje = "5/" + idPartida;
+                        // Enviamos al servidor respuesta negativa de la confirmación
+                        byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                        server.Send(msg);
+                    }
                 }
                 else if (codigo == 5)
                 {
-                    string mensaje = trozos[1].Split('\0')[0];
-                    MessageBox.Show("El nombre del jugador que jugo el dia seleccionado es: " + mensaje);
+                    string ElQueAcepta = trozos[1].Split('\0')[0];
+                    idPartida = Convert.ToInt32(trozos[2].Split('\0')[0]);
+                    MessageBox.Show(ElQueAcepta + "La partida ha comenzado (el chat esta disponible)");
                 }
                 else if (codigo == 6)
                 {
-                    string mensaje = trozos[1].Split('\0')[0];
-                    MessageBox.Show("El tiempo medio es de: " + mensaje + "s");
-                }
-                else if (codigo == 7)
-                {
-                    string resultado = String.Empty;
-                    int numConectados = trozos.Length;
-                    string[] Conectados = new string[numConectados];
-                    int i;
-                    for (i = 1; i < numConectados - 1; i++)
-                    {
-                        Conectados[i] = trozos[i];
-                        resultado = resultado + Conectados[i];
-                        if (i < numConectados - 2)
-                            resultado = resultado + ", ";
-                    }
-                    MessageBox.Show(resultado);
+                    chatPannel.Text = chatPannel.Text + trozos[2].Split('\0')[0] + ": " + trozos[1].Split('\0')[0] + "\n";
                 }
             }
         }
@@ -98,13 +114,16 @@ namespace WindowsFormsApplication1
 
             try
             {
-                // Quiere saber la contraseña
-                string usuario = nombre.Text;
-                string Contra = contra.Text;
-                string mensaje = "1/" + usuario +"/" + Contra;
-                // Enviamos al servidor el nombre tecleado
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg);
+                if (SesionIniciada == false)
+                {
+                    // Quiere saber la contraseña
+                    string usuario = nombre.Text;
+                    string Contra = contra.Text;
+                    string mensaje = "1/" + usuario + "/" + Contra;
+                    // Enviamos al servidor el nombre tecleado
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                    server.Send(msg);
+                }
             }
             catch (SocketException)
             {
@@ -176,90 +195,7 @@ namespace WindowsFormsApplication1
             server.Send(msg);
             atender.Abort();
             this.BackColor = Color.Gray;
-        }
-
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            if (SesionIniciada)
-            {
-            try  //Codigo Biel
-            {
-                if (Maximo.Checked)
-                {
-                    
-                    string mensaje = "3/";
-                    // Enviamos al servidor el nombre tecleado
-                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                    server.Send(msg);
-                }
-                if (Minimo.Checked)
-                {
-                    
-                    string mensaje = "4/";
-                    // Enviamos al servidor el nombre tecleado
-                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                    server.Send(msg);
-                }
-            }
-            catch (SocketException)
-            {
-                //Si hay excepcion imprimimos error y salimos del programa con return 
-                MessageBox.Show("No he podido conectar con el servidor");
-                return;
-            }
-            }
-            else
-            {
-                MessageBox.Show("Por favor inicia sesión");
-            }
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (SesionIniciada)
-            {
-            try   //Codigo Miguel
-            {
-
-                string mensaje = "5/" + textBox1.Text;
-                // Enviamos al servidor el nombre tecleado
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg);
-            }
-            catch (SocketException)
-            {
-                //Si hay excepcion imprimimos error y salimos del programa con return 
-                MessageBox.Show("No he podido conectar con el servidor");
-                return;
-            }
-            }
-            else
-            {
-                MessageBox.Show("Por favor inicia sesión");
-            }
-        }
-        private void button3_Click(object sender, EventArgs e)
-        {
-            if (SesionIniciada)
-            {            
-            try   //Codigo Uriel
-            {
-                string mensaje = "6/" + textBox2.Text;
-                // Enviamos al servidor el nombre tecleado
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg);
-            }
-            catch (SocketException)
-            {
-                //Si hay excepcion imprimimos error y salimos del programa con return 
-                MessageBox.Show("No he podido conectar con el servidor");
-                return;
-            }
-            }
-            else
-            {
-                MessageBox.Show("Por favor inicia sesión");
-            }
+            SesionIniciada = false;
         }
 
         private void pictureBox13_Click(object sender, EventArgs e)
@@ -306,13 +242,33 @@ namespace WindowsFormsApplication1
         {
             if (e.KeyCode == Keys.Enter)
             {
-                chatPannel.Text = chatPannel.Text + "Usuario" + ": " + chatBox.Text + "\n";
-                chatBox.Text = "";
+                if (SesionIniciada)
+                {
+                    try   //Invitación
+                    {
+                        string mensaje = "6/" + idPartida + "/" + chatBox.Text;
+                        chatBox.Text = "";
+                        // Enviamos al servidor el usuario invitado
+                        byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                        server.Send(msg);
+                    }
+                    catch (SocketException)
+                    {
+                        //Si hay excepcion imprimimos error y salimos del programa con return 
+                        MessageBox.Show("No he podido conectar con el servidor");
+                        return;
+                    }
+                    
+                }
+                else
+                {
+                    MessageBox.Show("Por favor inicia sesión");
+                }
             }
         }
         private void chatBox_Leave(object sender, EventArgs e)
         {
-            chatBox.Text = "Escribe aqui";
+            chatBox.Text = "Escribe aquí";
         }
 
         private void chatBox_Enter(object sender, EventArgs e)
@@ -329,6 +285,36 @@ namespace WindowsFormsApplication1
         {
             contra.Text = "";
             contra.UseSystemPasswordChar = true;
+        }
+        string Invitado;
+        private void Invitar_Click(object sender, EventArgs e)
+        {
+            if (SesionIniciada)
+            {
+                try   //Invitación
+                {
+                    string mensaje = "3/" + Invitado;
+                    // Enviamos al servidor el usuario invitado
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                    server.Send(msg);
+                }
+                catch (SocketException)
+                {
+                    //Si hay excepcion imprimimos error y salimos del programa con return 
+                    MessageBox.Show("No he podido conectar con el servidor");
+                    return;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Por favor inicia sesión");
+            }
+        }
+
+        private void ConectadosGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int FilaInvitado = e.RowIndex;
+            Invitado = Convert.ToString(ConectadosGridView[0, FilaInvitado].Value);
         }
     }
 }

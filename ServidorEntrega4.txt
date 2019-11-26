@@ -28,7 +28,47 @@ typedef struct{
 	Conectado Conectados[100];
 	int num;
 }LConectados;
-LConectados Lista;
+LConectados ListaConectados;
+typedef struct{
+	LConectados ListaJugadores;
+	int ocupado;
+}Partida;
+Partida TablaPartidas[100];
+int AnadirPartida(LConectados *ListaConectados, int sock_conn, int socketInvitado)
+{
+	int encontrado = 0;
+	while(i<100 && encontrado==0)
+	{
+		if (TablaPartidas[i].ocupado == 0)
+		{
+			TablaPartidas[i].ocupado = 1;
+			encontrado = 1;
+		}
+		else
+			i++;
+	}
+	if (encontrado == 1)
+	{
+		for (int j = 0; j < ListaConectados->num ; j++)
+		{
+			if (ListaConectados->Conectados[j].socket == sock_conn)
+			{
+				TablaPartidas[i].ListaJugadores.Conectados[0] =  ListaConectados->Conectados[j];
+				printf("Porfavor dime que entras aqui");
+				printf("sock_conn: %d\n", sock_conn);
+				TablaPartidas[i].ListaJugadores.num ++;			
+			}
+			else if (ListaConectados->Conectados[j].socket == socketInvitado)
+			{
+				TablaPartidas[i].ListaJugadores.Conectados[1] =  ListaConectados->Conectados[j];
+				TablaPartidas[i].ListaJugadores.num ++;	
+			}
+		}
+		return i;
+	}
+	else
+		return -1;
+}
 int IniciarSesion(char nombre[20], char contra[20], int socket)
 {
 	char consulta[100];
@@ -51,7 +91,7 @@ int IniciarSesion(char nombre[20], char contra[20], int socket)
 	{
 		if (strcmp(contra, row[0])==0)
 		{
-			ConectarUsuario(nombre, &Lista, socket);
+			ConectarUsuario(nombre, &ListaConectados, socket);
 			return 0;
 		}
 		else
@@ -129,123 +169,14 @@ void DesconectarUsuario(char *nombre[20],LConectados *lista)
 		}
 	}		
 }
-void DevuelveConectados(char *ListaConectados[500],LConectados *lista) //Devuelve la lista de conectados y en el int, tambi￩n el n￺mero
+void DevuelveConectados(char *ListaConectados[500],LConectados *lista) //Devuelve la lista de conectados y en el int, tambi￯﾿ﾯ￯ﾾ﾿￯ﾾﾩn el n￯﾿ﾯ￯ﾾ﾿￯ﾾﾺmero
 {
 	int i;
-	strcpy(ListaConectados,"7/");
+	strcpy(ListaConectados,"3/");
 	for (i=0; i < lista->num ; i++)
 	{
 		strcat(ListaConectados, lista->Conectados[i].Usuario);
 		strcat(ListaConectados, "/");
-	}
-}
-int PideMaximo()
-{
-	char consulta[300];
-	strcpy (consulta,"SELECT count(Partida.id) FROM Partida WHERE Partida.ganador = (SELECT Jugador.nombre FROM Jugador WHERE Jugador.puntuacionMax = (SELECT MAX(Jugador.puntuacionMax) FROM Jugador));");
-	int err;
-	err=mysql_query (conn, consulta);
-	if (err!=0)
-	{
-		printf ("Error al consultar datos de la base %u %s\n",
-				mysql_errno(conn), mysql_error(conn));
-		exit (1);
-	}
-	resultado = mysql_store_result (conn);
-	row = mysql_fetch_row (resultado);
-	if (row == NULL)
-	{
-		return -1;
-		printf ("No se han obtenido datos en la consulta\n");
-	}
-	else
-	{
-		int NumPartidas = atoi(row[0]);
-		return NumPartidas;
-	}
-}
-int PideMinimo()
-{
-	char consulta[300];
-	strcpy (consulta,"SELECT count(Partida.id) FROM Partida WHERE Partida.ganador = (SELECT Jugador.nombre FROM Jugador WHERE Jugador.puntuacionMax = (SELECT MIN(Jugador.puntuacionMax) FROM Jugador));");
-	int err;
-	err=mysql_query (conn, consulta);
-	if (err!=0)
-	{
-		printf ("Error al consultar datos de la base %u %s\n",
-				mysql_errno(conn), mysql_error(conn));
-		exit (1);
-	}
-	resultado = mysql_store_result (conn);
-	row = mysql_fetch_row (resultado);
-	if (row == NULL)
-	{
-		return -1;
-		printf ("No se han obtenido datos en la consulta\n");
-	}
-	else
-	{
-		int NumPartidas = atoi(row[0]);
-		return NumPartidas;
-	}
-}
-void ConsultaFecha(char *fecha[11], char *buff2[512])
-{
-	char consulta[300];
-	strcpy (consulta,"SELECT Jugador.nombre FROM Jugador WHERE Jugador.id IN (SELECT Jugador.id FROM Partida, Relacion, Jugador WHERE Jugador.puntuacionMax = (SELECT MAX(Jugador.puntuacionMax) FROM Partida, Relacion, Jugador WHERE Partida.fecha = '");
-	strcat (consulta, fecha);
-	strcat (consulta,"' AND Partida.id = Relacion.idJugador AND Relacion.idJugador = Jugador.id) AND Jugador.id = Relacion.idJugador AND Relacion.idPartida = Partida.id AND Partida.fecha = '");
-	strcat (consulta, fecha);
-	strcat (consulta, "');");
-	int err;
-	err=mysql_query (conn, consulta);
-	if (err!=0)
-	{
-		printf ("Error al consultar datos de la base %u %s\n",
-				mysql_errno(conn), mysql_error(conn));
-		exit (1);
-	}
-	resultado = mysql_store_result (conn);
-	row = mysql_fetch_row (resultado);
-	if (row == NULL)
-	{
-		strcpy(buff2,"5/ERROR: No se han obtenido datos en la consulta");
-		printf ("No se han obtenido datos en la consulta\n");
-	}
-	else
-	{
-		strcpy(buff2,"5/");
-		strcat(buff2,row[0]);
-		row = mysql_fetch_row (resultado);
-	}
-}
-int TiempoMedio(char nombre[20])
-{
-	char consulta[300];
-	strcpy (consulta,"SELECT avg(Partida.tiempo) FROM Partida, Jugador, Relacion WHERE Partida.dificultad = 'd' AND Jugador.nombre = '");
-	strcat (consulta,nombre);
-	strcat (consulta,"' AND Jugador.id = Relacion.idJugador AND Relacion.idPartida = Partida.id;");
-	
-	int err;
-	err=mysql_query (conn, consulta);
-	if (err!=0)
-	{
-		printf ("Error al consultar datos de la base %u %s\n",
-				mysql_errno(conn), mysql_error(conn));
-		exit (1);
-	}
-	resultado = mysql_store_result (conn);
-	row = mysql_fetch_row (resultado);
-	
-	if (row == NULL)
-	{
-		return -1;
-		printf ("No se han obtenido datos en la consulta\n");
-	}
-	else
-	{
-		int tiempo = atoi(row[0]);
-		return tiempo;
 	}
 }
 
@@ -291,10 +222,10 @@ void *AtenderCliente (void *socket)
 			char nombre[20];
 			strcpy (nombre, p);
 			pthread_mutex_lock(&mutex);
-			DesconectarUsuario(&nombre, &Lista);
+			DesconectarUsuario(&nombre, &ListaConectados);
 			pthread_mutex_unlock(&mutex);
 			char notificacion[20];
-			DevuelveConectados(notificacion, &Lista);
+			DevuelveConectados(notificacion, &ListaConectados);
 			int j;
 			for(j=0;j<i;j++)
 			{
@@ -303,7 +234,7 @@ void *AtenderCliente (void *socket)
 			//terminar=1;
 		}
 		
-		if (codigo ==1) //Iniciar Sesi￳n
+		if (codigo ==1) //Iniciar Sesi￯﾿ﾯ￯ﾾ﾿￯ﾾﾳn
 		{
 			p = strtok( NULL, "/");
 			char nombre[20];
@@ -313,11 +244,11 @@ void *AtenderCliente (void *socket)
 			pthread_mutex_lock(&mutex);
 			strcpy (contra, p);
 			printf ("Codigo: %d, Nombre: %s, Contrase\ufff1a:%s\n", codigo, nombre, contra);
-			sprintf(buff, "1/%d", (IniciarSesion(nombre, contra,socket)));
+			sprintf(buff, "1/%d", (IniciarSesion(nombre, contra, sock_conn)));
 			write (sock_conn, buff, strlen(buff));
 			pthread_mutex_unlock(&mutex);
 			char notificacion[20];
-			DevuelveConectados(notificacion, &Lista);
+			DevuelveConectados(notificacion, &ListaConectados);
 			int j;
 			for(j=0;j<i;j++)
 			{
@@ -340,45 +271,133 @@ void *AtenderCliente (void *socket)
 				strcpy(buff2, "2/El usuario no ha sido registrado");
 			write (sock_conn, buff2, strlen(buff2));
 		}
-		
-		if (codigo ==3) //Piden maximo
+		if (codigo ==3) //Solicitud invitacion
 		{
 			p = strtok( NULL, "/");
-			sprintf(buff2, "3/%d", PideMaximo());
-			write (sock_conn,buff2,strlen(buff2));
+			char ElQueInvita[20];
+			char invitado[20];
+			int socketInvitado;
+			int idPartida;
+			strcpy(invitado,p);
+			printf ("invitado = %s\n", invitado);
+			int encontrado = 0;
+			int i = 0;
+			while(i<ListaConectados.num && encontrado==0)
+			{
+				if (strcmp(invitado, ListaConectados.Conectados[i].Usuario) == 0)
+					encontrado = 1;
+				else
+					i++;
+			}
+			if (encontrado == 1)
+			{
+				socketInvitado = ListaConectados.Conectados[i].socket;
+				printf ("socketInvitado = %d\n", socketInvitado);
+			}
+			int encontrado2 = 0;
+			while(i<ListaConectados.num && encontrado2==0)
+			{
+				if (sock_conn == ListaConectados.Conectados[i].socket)
+					encontrado2 = 1;
+				else
+					i++;
+			}
+			if (encontrado2 == 1)
+			{
+				strcpy(ElQueInvita,  ListaConectados.Conectados[i].Usuario);
+				printf ("ElQueInvita = %s\n", ElQueInvita);
+			}
+			idPartida = AnadirPartida(&ListaConectados, sock_conn, socketInvitado);
+			printf ("idPartida = %d\n", idPartida);
+			if (idPartida != -1)
+			{
+				sprintf(buff2, "4/%s/%d", ElQueInvita, idPartida) ;
+				write (socketInvitado,buff2,strlen(buff2));
+			}
 		}
-		if (codigo ==4) //Piden minimo
+		if (codigo == 4) //Confirmacion invitacion
 		{
-			p = strtok( NULL, "/");
-			sprintf(buff2, "4/%d", PideMinimo());
-			write (sock_conn,buff2,strlen(buff2));
+			p = strtok( NULL, "\0");
+			int idPartida;
+			char ElQueConfirma[20];
+			printf ("ElQueConfirma1 = %s\n", ElQueConfirma);
+			
+			int socketElQueInvita;
+			idPartida = atoi(p);
+			strcpy(ElQueConfirma, TablaPartidas[idPartida].ListaJugadores.Conectados[1].Usuario);
+			/*			int encontrado = 0;*/
+			/*			while(i < TablaPartidas[idPartida].ListaJugadores.num && encontrado==0)*/
+			/*			{*/
+			/*				if (sock_conn == TablaPartidas[idPartida].ListaJugadores.Conectados[i].socket)*/
+			/*					encontrado = 1;*/
+			/*				else*/
+			/*					i++;*/
+			/*			}*/
+			/*			printf ("ElQueConfirma2 = %s\n", ElQueConfirma);*/
+			/*			if (encontrado == 1)*/
+			/*			{*/
+			/*				strcpy(ElQueConfirma, TablaPartidas[idPartida].ListaJugadores.Conectados[i].Usuario);*/
+			/*				printf ("ElQueConfirma3 = %s\n", ElQueConfirma);*/
+			/*			}*/
+			printf ("ElQueConfirma4 = %s\n", ElQueConfirma);
+			socketElQueInvita =  TablaPartidas[idPartida].ListaJugadores.Conectados[0].socket;
+			sprintf(buff2, "5/%s/%d",ElQueConfirma, idPartida);
+			printf ("Lo que envia para confirmar invitaci￳n: %s\n", buff2);
+			printf("socketElQueInvita: %d\n", socketElQueInvita);
+			write (socketElQueInvita,buff2,strlen(buff2));
 		}
-		/*		if (codigo ==5) *///Piden codigo miguel dan fecha
+		/*		if (codigo == 5) *///Invitacion rechazada
 		/*		{*/
 		/*			p = strtok( NULL, "\0");*/
-		/*			char fecha[11];*/
-		/*			strcpy(fecha,p);*/
-		/*			char respuesta[50];*/
-		/*			ConsultaFecha(fecha, respuesta);*/
-		/*			printf(respuesta);*/
-		/*			strcpy(buff2, respuesta);*/
-		/*			write (sock_conn,buff2,strlen(buff2));*/
+		/*			int idPartida;*/
+		/*			char ElQueDeniega[20];*/
+		/*			idPartida = atoi(p);*/
+		/*			encontrado = 0;*/
+		/*			while(i < TablaPartidas[idPartida].ListaJugadores.num && encontrado == 0)*/
+		/*			{*/
+		/*				if (sock_conn == TablaPartidas[idPartida].ListaJugadores.Conectados[i].socket)*/
+		/*					encontrado = 1;*/
+		/*				else*/
+		/*					i++;*/
+		/*			}*/
+		/*			if (encontrado == 1)*/
+		/*			{*/
+		/*				strcpy(ElQueDeniega, TablaPartidas[idPartida].ListaJugadores.Conectados[i].Usuario)*/
+		/*			}*/
+		/*			socketElQueInvita =  TablaPartidas[idPartida].ListaJugadores.Conectados[0].socket;*/
+		/*			sprintf(buff2, "5/%d/%s", idPartida, ElQueDeniega);*/
+		/*			write (socketElQueInvita,buff2,strlen(buff2));*/
 		/*		}*/
-		if (codigo ==5) //Piden codigo miguel dan fecha
+		if (codigo == 6)
 		{
-			p = strtok( NULL, "\0");
-			char fecha[11];
-			strcpy(fecha,p);
-			ConsultaFecha(&fecha, &buff2);
-			write (sock_conn,buff2,strlen(buff2));
-		}
-		if (codigo ==6) //Piden codigo Uriel dan nombre
-		{
-			p = strtok( NULL, "\0");
-			char nombre[20];
-			strcpy(nombre,p);
-			sprintf(buff2, "6/%d", TiempoMedio(nombre));
-			write (sock_conn,buff2,strlen(buff2));
+			p = strtok( NULL, "/");
+			int idPartida;
+			idPartida = atoi(p);
+			printf ("idPartida = %d\n", idPartida);
+			p = strtok( NULL, "/");
+			char Jugada[50];
+			strcpy(Jugada,p);
+			int j=0;
+			int encontrado = 0;
+			char nombreUsuarioChat[20];
+			while (j < TablaPartidas[idPartida].ListaJugadores.num && encontrado == 0)
+			{
+				if (TablaPartidas[idPartida].ListaJugadores.Conectados[j].socket == sock_conn)
+				{
+					strcpy(nombreUsuarioChat,TablaPartidas[idPartida].ListaJugadores.Conectados[j].Usuario);
+					encontrado = 1;
+				}
+				else j++;
+			}
+
+			for (int i = 0; i < TablaPartidas[idPartida].ListaJugadores.num; i++)
+			{
+				printf ("Entra en el bucle\n");
+				socket = TablaPartidas[idPartida].ListaJugadores.Conectados[i].socket;
+				sprintf(buff2, "6/%s/%s", Jugada,nombreUsuarioChat);
+				printf("Socket: %d\n", socket);
+				write (socket,buff2,strlen(buff2));
+			}
 		}
 	}
 }
@@ -424,7 +443,7 @@ int main(int argc, char *argv[])
 		printf("Error en el Listen");
 	
 	pthread_t thread;
-	// Bucle para atender a clientes "infinitos" (100 debido al n￯﾿ﾺmero de threads)
+	// Bucle para atender a clientes "infinitos" (100 debido al n￯﾿ﾯ￯ﾾ﾿￯ﾾﾯ￯﾿ﾯ￯ﾾﾾ￯ﾾ﾿￯﾿ﾯ￯ﾾﾾ￯ﾾﾺmero de threads)
 	for (;;){
 		printf ("Escuchando\n");
 		
@@ -442,3 +461,4 @@ int main(int argc, char *argv[])
 		
 	}
 }
+

@@ -148,3 +148,19 @@ E:\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\obj\Debug\client
 E:\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
 E:\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
 E:\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.GenerateResource.Cache
+C:\Users\migue\Desktop\3A\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+C:\Users\migue\Desktop\3A\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\Users\migue\Desktop\3A\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+C:\Users\migue\Desktop\3A\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
+C:\Users\migue\Desktop\3A\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\obj\Debug\clienteForm.csprojResolveAssemblyReference.cache
+C:\Users\migue\Desktop\3A\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
+C:\Users\migue\Desktop\3A\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\migue\Desktop\3A\SO\Garbanzo_Robusto\cliente_inicial\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.GenerateResource.Cache
+C:\Users\Biel\Desktop\Proves SO\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+C:\Users\Biel\Desktop\Proves SO\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\Users\Biel\Desktop\Proves SO\cliente_inicial\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+C:\Users\Biel\Desktop\Proves SO\cliente_inicial\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
+C:\Users\Biel\Desktop\Proves SO\cliente_inicial\WindowsFormsApplication1\obj\Debug\clienteForm.csprojResolveAssemblyReference.cache
+C:\Users\Biel\Desktop\Proves SO\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
+C:\Users\Biel\Desktop\Proves SO\cliente_inicial\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\Biel\Desktop\Proves SO\cliente_inicial\WindowsFormsApplication1\obj\Debug\clienteForm.csproj.GenerateResource.Cache

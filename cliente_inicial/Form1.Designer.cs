@@ -32,6 +32,8 @@
             this.nombre = new System.Windows.Forms.TextBox();
             this.IniciarSesion = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.Invitar = new System.Windows.Forms.Button();
+            this.ConectadosGridView = new System.Windows.Forms.DataGridView();
             this.chatBox = new System.Windows.Forms.TextBox();
             this.chatPannel = new System.Windows.Forms.RichTextBox();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -51,21 +53,12 @@
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.Maximo = new System.Windows.Forms.RadioButton();
-            this.Minimo = new System.Windows.Forms.RadioButton();
             this.Desconectar = new System.Windows.Forms.Button();
             this.conectar = new System.Windows.Forms.Button();
             this.DarseAlta = new System.Windows.Forms.Button();
             this.contra = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ConectadosGridView)).BeginInit();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
@@ -90,8 +83,8 @@
             this.nombre.Name = "nombre";
             this.nombre.Size = new System.Drawing.Size(119, 20);
             this.nombre.TabIndex = 3;
-            this.nombre.Tag = "Usuario";
-            this.nombre.Text = "Usuario";
+            this.nombre.Tag = "User";
+            this.nombre.Text = "User";
             this.nombre.Enter += new System.EventHandler(this.nombre_Enter);
             // 
             // IniciarSesion
@@ -107,19 +100,11 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.groupBox1.Controls.Add(this.Invitar);
+            this.groupBox1.Controls.Add(this.ConectadosGridView);
             this.groupBox1.Controls.Add(this.chatBox);
             this.groupBox1.Controls.Add(this.chatPannel);
             this.groupBox1.Controls.Add(this.panel1);
-            this.groupBox1.Controls.Add(this.textBox2);
-            this.groupBox1.Controls.Add(this.button3);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.textBox1);
-            this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.Maximo);
-            this.groupBox1.Controls.Add(this.Minimo);
             this.groupBox1.Controls.Add(this.Desconectar);
             this.groupBox1.Controls.Add(this.conectar);
             this.groupBox1.Controls.Add(this.DarseAlta);
@@ -131,6 +116,28 @@
             this.groupBox1.Size = new System.Drawing.Size(965, 590);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
+            // 
+            // Invitar
+            // 
+            this.Invitar.Location = new System.Drawing.Point(890, 358);
+            this.Invitar.Margin = new System.Windows.Forms.Padding(2);
+            this.Invitar.Name = "Invitar";
+            this.Invitar.Size = new System.Drawing.Size(51, 24);
+            this.Invitar.TabIndex = 28;
+            this.Invitar.Text = "Invitar";
+            this.Invitar.UseVisualStyleBackColor = true;
+            this.Invitar.Click += new System.EventHandler(this.Invitar_Click);
+            // 
+            // ConectadosGridView
+            // 
+            this.ConectadosGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ConectadosGridView.Location = new System.Drawing.Point(863, 97);
+            this.ConectadosGridView.Margin = new System.Windows.Forms.Padding(2);
+            this.ConectadosGridView.Name = "ConectadosGridView";
+            this.ConectadosGridView.RowTemplate.Height = 28;
+            this.ConectadosGridView.Size = new System.Drawing.Size(101, 238);
+            this.ConectadosGridView.TabIndex = 27;
+            this.ConectadosGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ConectadosGridView_CellClick);
             // 
             // chatBox
             // 
@@ -350,111 +357,6 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox13_Click);
             // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(910, 504);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(47, 20);
-            this.textBox2.TabIndex = 21;
-            this.textBox2.Text = "Ella";
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(910, 530);
-            this.button3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(47, 27);
-            this.button3.TabIndex = 22;
-            this.button3.Text = "Enviar";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // label5
-            // 
-            this.label5.Location = new System.Drawing.Point(868, 437);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(89, 73);
-            this.label5.TabIndex = 20;
-            this.label5.Text = "Tiempo medio de partidas dificiles jugadas por el jugador seleccionado:";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(887, 372);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(70, 20);
-            this.textBox1.TabIndex = 19;
-            this.textBox1.Text = "14/08/1969";
-            // 
-            // label4
-            // 
-            this.label4.Location = new System.Drawing.Point(857, 301);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(100, 68);
-            this.label4.TabIndex = 18;
-            this.label4.Text = "Nombre del jugador con la puntuacion máxima\r\n que jugó el dia seleccionado:\r\n";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(910, 398);
-            this.button2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(47, 27);
-            this.button2.TabIndex = 17;
-            this.button2.Text = "Enviar";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(913, 255);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(47, 27);
-            this.button1.TabIndex = 16;
-            this.button1.Text = "Enviar\r\n";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
-            // 
-            // label3
-            // 
-            this.label3.Location = new System.Drawing.Point(863, 163);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(97, 66);
-            this.label3.TabIndex = 15;
-            this.label3.Text = "Numero de partidas ganadas por el jugador con la puntuación máxima o mínima\r\n";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // Maximo
-            // 
-            this.Maximo.AutoSize = true;
-            this.Maximo.Location = new System.Drawing.Point(915, 232);
-            this.Maximo.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.Maximo.Name = "Maximo";
-            this.Maximo.Size = new System.Drawing.Size(45, 17);
-            this.Maximo.TabIndex = 14;
-            this.Maximo.TabStop = true;
-            this.Maximo.Text = "Max";
-            this.Maximo.UseVisualStyleBackColor = true;
-            // 
-            // Minimo
-            // 
-            this.Minimo.AutoSize = true;
-            this.Minimo.Location = new System.Drawing.Point(871, 232);
-            this.Minimo.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.Minimo.Name = "Minimo";
-            this.Minimo.Size = new System.Drawing.Size(42, 17);
-            this.Minimo.TabIndex = 13;
-            this.Minimo.TabStop = true;
-            this.Minimo.Text = "Min";
-            this.Minimo.UseVisualStyleBackColor = true;
-            // 
             // Desconectar
             // 
             this.Desconectar.Location = new System.Drawing.Point(879, 47);
@@ -495,7 +397,7 @@
             this.contra.Name = "contra";
             this.contra.Size = new System.Drawing.Size(119, 20);
             this.contra.TabIndex = 4;
-            this.contra.Text = "Contraseña";
+            this.contra.Text = "Password";
             this.contra.Enter += new System.EventHandler(this.contra_Enter);
             // 
             // Form1
@@ -509,6 +411,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ConectadosGridView)).EndInit();
             this.panel1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -539,16 +442,6 @@
         private System.Windows.Forms.Button DarseAlta;
         private System.Windows.Forms.Button conectar;
         private System.Windows.Forms.Button Desconectar;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.RadioButton Maximo;
-        private System.Windows.Forms.RadioButton Minimo;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.PictureBox pictureBox11;
         private System.Windows.Forms.PictureBox pictureBox10;
@@ -568,6 +461,8 @@
         private System.Windows.Forms.PictureBox pictureBox12;
         private System.Windows.Forms.TextBox chatBox;
         private System.Windows.Forms.RichTextBox chatPannel;
+        private System.Windows.Forms.DataGridView ConectadosGridView;
+        private System.Windows.Forms.Button Invitar;
     }
 }
 
